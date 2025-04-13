@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    env_file:
+      - .env
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DBNAME}
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
